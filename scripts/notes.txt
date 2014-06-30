@@ -1,0 +1,39 @@
+Methods : {
+    can // methods all canned objects should have
+    shapes
+        fillRect
+        strokeRect
+        roundedRect
+        fillOval
+        strokeOval
+    lines
+        strokeArc
+        fillArc
+    text
+        fillText
+        strokeText
+        wrapText
+    containers
+        groups
+    special
+        images
+        graphs
+
+
+isAt: line, arc, fillArc
+
+setRadius: roundedRect, fillOval, strokeOval
+
+setters and getters
+
+
+Alignments, alpha, composite
+
+
+can.save
+ - returns an object holding the state of can at the time of use
+ - also stores in can.saved
+
+can.restore
+ - restores can to can.saved state
+ - if an object is passed to it, it will use that instead
