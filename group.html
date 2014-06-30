@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Group Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <style type="text/css">
+body    {background: black;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+var test = function () {
+    can.screen.fitWindow();
+    var group = can.create.group(40, 40, 100, 100);
+    var r = can.create.rect(10, 10, 10, 10, "red");
+    var t = can.create.text("Click to Spin!\nDrag to Move!", 50, 50, 150, null, "white", "center");
+    r.remove();
+    r.addTo(group);
+    t.remove();
+    t.addTo(group);
+    can.draw();
+
+    var id = 0;
+    group.setEvent("click", function () {
+        if (id == 0) {
+            id = setInterval(function () {
+                group.rotateBy(1/16);
+                can.draw();
+            }, 1000/60);
+        } else {
+            clearInterval(id);
+            id = 0;
+        }
+    });
+    group.setEvent("mousedown", function (e) {
+        this.xs = e.x;
+        this.ys = e.y;
+    });
+    group.setEvent("mousedrag", function (e) {
+        this.moveBy(e.x-this.xs, e.y-this.ys);
+        this.xs = e.x;
+        this.ys = e.y;
+        can.draw();
+    });
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+    <canvas></canvas>
+</body>
+</html>

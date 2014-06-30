@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Group Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <style type="text/css">
+body    {background: white;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+var test = function () {
+    can.screen.fitWindow();
+
+    var group = can.create.group(40, 40, 100, 100);
+
+    var rect = can.create.rect(0, 0, 100, 100, "black");
+    rect.remove();
+    rect.addTo(group);
+
+    var img = can.vas.getContext("2d").createImageData(100, 100);
+    for (var i=0;i<img.data.length;i++)
+        img.data[i] = Math.floor(Math.random()*256);
+
+    var data = can.create.imageData(img, 10, 10);
+    data.remove();
+    data.addTo(group);
+
+    can.draw();
+
+    var id = 0;
+    group.setEvent("click", function () {
+        if (id == 0) {
+            id = setInterval(function () {
+                group.rotateBy(1/16);
+                can.draw();
+            }, 1000/60);
+        } else {
+            clearInterval(id);
+            id = 0;
+        }
+    });
+    group.setEvent("mousedown", function (e) {
+        this.xs = e.x;
+        this.ys = e.y;
+    });
+    group.setEvent("mousedrag", function (e) {
+        this.moveBy(e.x-this.xs, e.y-this.ys);
+        this.xs = e.x;
+        this.ys = e.y;
+        can.draw();
+    });
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+    <canvas></canvas>
+</body>
+</html>

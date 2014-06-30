@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Mouse Click Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+var test = function () {
+    can.screen.fitWindow();
+    var back = can.create.rect(0, 0, can.width, can.height, "#fff");
+
+    var mousedrag = can.create.text("Mouse Drag", 10, 10, null, null, "#00a");
+    mousedrag.setEvent("mousedown", function (e) {
+        this.xs = e.x;
+        this.ys = e.y;
+    });
+    mousedrag.setEvent("mousedrag", function (e) {
+        this.setString("DRAGGED!");
+        this.style = "#f00";
+        this.moveBy(e.x-this.xs, e.y-this.ys);
+        this.xs = e.x;
+        this.ys = e.y;
+        can.draw();
+    });
+
+    var click = can.create.text("Click", 10, 40, null, null, "#00a");
+    var clickCount = 0;
+    click.setEvent("click", function (e) {
+        this.setString("CLICKED! (" + (++clickCount) + ")");
+        this.style = "#f00";
+        can.draw();
+    });
+
+    dblclick = can.create.text("Double Click", 10, 70, null, null, "#00a");
+    var dblclickCount = 0;
+    dblclick.setEvent("dblclick", function (e) {
+        this.setString("Double CLICKED! (" + (++dblclickCount) + ")");
+        this.style = "#f00";
+        can.draw();
+    });
+
+    var mouseenter = can.create.text("Mouse Enter", 10, 100, null, null, "#00a");
+    mouseenter.setEvent("mouseenter", function (e) {
+        this.setString("Mouse Entered!");
+        this.style = "#f00";
+        can.draw();
+    });
+
+    var mouseleave = can.create.text("Mouse Leave", 10, 130, null, null, "#00a");
+    mouseleave.setEvent("mouseleave", function (e) {
+        this.setString("Mouse Left!");
+        this.style = "#f00";
+        can.draw();
+    });
+
+    var mousedown = can.create.text("Mouse Down", 10, 160, null, null, "#00a");
+    mousedown.setEvent("mousedown", function (e) {
+        this.setString("Mouse Press!");
+        this.style = "#f00";
+        can.draw();
+    });
+
+    mousemoves = can.create.text("Mouse Move", 10, 190, null, null, "#00a");
+    back.setEvent("mousemove", function (e) {
+        mousemoves.setString("(x: " + e.x + ", y: " + e.y + ")");
+        mousemoves.style = "#000";
+        can.draw();
+    });
+
+    var mouseup = can.create.text("Mouse Up", 10, 220, null, null, "#00a");
+    mouseup.setEvent("mouseup", function (e) {
+        this.setString("Mouse Up!");
+        this.style = "#f00";
+        can.draw();
+    });
+
+    var offscreen = can.create.text("offscreen (click to test)", 10, 250, null, null, "#00a");
+    offscreen.setEvent("offscreen", function (e) {
+        this.setString("Is Off Screen!");
+        this.style = "#f00";
+        alert(this.str);
+        this.moveTo(10, 250);
+        this.remove();
+    });
+    offscreen.setEvent("click", function (e) {
+        this.moveTo(0,-30);
+        can.draw();
+    });
+
+
+    can.draw();
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+    <canvas></canvas>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Graph Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+var test = function () {
+    can.screen.fitWindow();
+    // x, y, width, height, xtext, ytext, strokeStye, fillStyle, xMax, yMax, xMin, yMin, data1, data2...
+    can.create.graph(10, 10, 220, 220, "Time (s)", "Acceleration (m/s/s)", "black", "white", 40, 4, 4, 0, 0,
+            {points:[{x:0,y:0},{x:1,y:1},{x:2,y:2},{x:3,y:3}], color : "green"},
+            {points:[{x:1,y:3},{x:2,y:1},{x:3,y:2},{x:1,y:3}], color : "blue"},
+            {points:[{x:1,y:2},{x:2,y:3},{x:3,y:1}], color : "red"});
+    can.draw();
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+    <canvas></canvas>
+</body>
+</html>

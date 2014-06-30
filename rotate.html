@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Basic Object & Rotate Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <style type="text/css">
+body    {background: black;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+var test = function () {
+    can.screen.fitWindow();
+    can.create.rect(10, 10, 10, 10, "red");
+    can.create.text("[Click to Spin]", 10, 10, 150, null, "white");
+    var w = can.create.wrappedText("a involved test of text wrapping for demo purposes", 160, 10, 200, 10, "blue");
+    can.create.framedRect(10, 40, 100, 10, "green", 4);
+    can.create.roundedRect(150, 40, 50, 50, "blue", 10);
+    can.create.framedText("T", 160, 40, 200, 40, "black");
+    can.create.image("images/bg.jpg", 110, 100, 200, 200);
+    can.create.line(100, 80, 10, 170, "white", 4);
+    can.create.framedOval(205, 40, 45, 35, "green", 4);
+    can.create.oval(220, 50, 15, null, "blue");
+    can.create.arc(280, 40, 25, 0, Math.PI, "red", 5);
+    can.create.filledArc(290, 50, 15, Math.PI, 1.5*Math.PI, "red");
+    can.draw();
+
+    var id = 0;
+    var back = can.create.rect(0, 0, can.width, can.height, "black");
+    back.sendToBack();
+    back.setEvent("click", function () {
+        if (id == 0) {
+            id = setInterval(function () {
+                for (var i=1;i<can.cans.length;i++) {
+                    can.cans[i].rotateBy(1/16);
+                }
+                can.draw();
+            }, 1000/60);
+        } else {
+            clearInterval(id);
+            id = 0;
+        }
+    });
+
+    w.setEvent("click", function () {alert(this.height);});
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+    <canvas></canvas>
+</body>
+</html>

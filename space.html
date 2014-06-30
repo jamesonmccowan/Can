@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Space Labyrinth</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <style type="text/css">
+body    {background: black;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+start = function () {
+    can.screen.fitWindow();
+    can.draw();
+    var group = can.create.group((can.width/2)-200, (can.height/2)-200, 400, 400);
+    group.setEvent("mousedown", function (e) {
+        this.xs = e.x;
+        this.ys = e.y;
+    });
+    group.setEvent("mousedrag", function (e) {
+        this.moveBy(e.x-this.xs, e.y-this.ys);
+        this.xs = e.x;
+        this.ys = e.y;
+    });
+
+    var step = function () {
+        this.oval.width += this.growth;
+        this.oval.height += this.growth;
+        var mod = this.speed*this.oval.width/2;
+        this.oval.moveBy(this.x*mod, this.y*mod);
+    }
+
+    var stars = [];
+    function star () {
+        var direction = Math.random()*Math.PI*2;
+        var speed = Math.random()*2;
+        var x = Math.cos(direction);
+        var y = Math.sin(direction);
+        var growth = 0.04*speed*speed;
+
+        var star = {
+            "i" : stars.length,
+            "x" : x,
+            "y" : y,
+            "speed" : speed,
+            "growth" : growth,
+            "step" : step,
+            "oval" : can.create.oval(group.x+(group.width/2), group.y+(group.height/2), 2, null, "white"),
+//"rgb(" + (128+Math.floor(Math.random()*128)) + ", " + (128+Math.floor(Math.random()*128)) + "," + (128+Math.floor(Math.random()*128)) + ")"),
+        };
+        star.oval.setEvent("offscreen", function (e) {
+            this.remove();
+            star.oval = null;
+        });
+        star.oval.align = "center";
+        stars.push(star);
+    }
+    
+    fps = can.create.text("FPS: ", 10, 10, null, null, "gray");
+    time = [];
+    function space () {
+        star();
+        time.push((new Date()).getTime());
+        fps.sendToFront();
+        var i=0
+        for (;i<time.length;i++) {
+            if (time[time.length-1]-time[i] < 1000) {
+                break;
+            }
+        }
+        time.splice(0,i);
+        fps.str="FPS "+time.length;
+
+        for (var i=0;i<stars.length;i++) {
+            stars[i].step();
+            if (stars[i].oval == null) {
+                stars.splice(i, 1);
+                i--;
+            }
+        }
+        can.draw();
+        setTimeout(space, 1);
+        return true;
+    }
+    setTimeout(space, 1);
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);start()'>
+    <canvas></canvas>
+</body>
+</html>

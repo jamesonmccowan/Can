@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Methods</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <style type="text/css">
+body    {background: black;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+
+
+var shuffle = function () {
+    first.sendToFront();
+    c.sendBackward();
+    a.sendForward();
+    a.sendForward();
+    by.moveBy(-260, 110);
+    to.moveTo(10, 100);
+    if (to.isOn(by.x, by.y))
+        can.create.wrappedText("to is " + to.distance(by) + " from overlapping by", 140, 100, 100, 10, "#00f");
+    can.draw();
+}
+
+// moveTo, moveBy, isOn, distance, sendForward, sendBackward, sendToFront, sendToBack, isVisible
+var test = function () {
+    can.screen.fitWindow();
+
+    first = can.create.rect(10, 10, 40, 40, "#fff");
+
+    a = can.create.rect(140, 10, 40, 40, "#f00");
+    b = can.create.rect(160, 30, 40, 40, "#0f0");
+    c = can.create.rect(180, 50, 40, 40, "#00f");
+
+    by = can.create.rect(290, 10, 40, 40, "#f0f");
+    to = can.create.rect(310, 30, 40, 40, "#0ff");
+
+    last = can.create.rect(30, 30, 40, 40, "#888");
+
+    can.draw();
+    setTimeout(shuffle, 1000);
+}
+    --></script>
+</head>
+<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+    <canvas></canvas>
+</body>
+</html>
