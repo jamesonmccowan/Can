@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Unit Tests</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="index.css" />
+    <style type="text/css">
+body    {background: #ddd;}
+canvas    {background: #fff;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+</head>
+<body>
+    <canvas></canvas>
+    <script type="text/javascript">
+var stage = can.stage(document.getElementsByTagName("canvas")[0]);
+var rect = can.rect({x : 10, y : 10, width : 10, height : 10, stroke: "red"});
+stage.add(rect);
+stage.draw();
+    </script>
+</body>
+</html>

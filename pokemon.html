@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - Polygon Pokemon Demo</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="styles/global.css" />
+    <style type="text/css">
+body    {background: white;}
+    </style>
+    <script type="text/javascript" src="scripts/can.js"></script>
+    <script type="text/javascript"><!--
+function rombus(width, height, angle) {
+    var top = height/4;
+    var bottom = height/80;
+    var diff = top-bottom;
+    
+/*    var points = [
+        {x:0,y:0},
+        {x:top,y:0},
+        {x:top-diff/2,y:width},
+        {x:diff/2,y:width}
+    ];*/
+    var points = [
+        {x:(width/2)+Math.sin(angle)*(bottom/2), y:(height/2)+Math.cos(angle)*(bottom/2)},
+        {x:(width/2)-Math.sin(angle)*(bottom/2), y:(height/2)-Math.cos(angle)*(bottom/2)},
+        {x:(width/2)-Math.sin(angle)*(top/2)+Math.cos(angle)*(width), y:(height/2)-Math.cos(angle)*(top/2)-Math.sin(angle)*(width)},
+        {x:(width/2)+Math.sin(angle)*(top/2)+Math.cos(angle)*(width), y:(height/2)+Math.cos(angle)*(top/2)-Math.sin(angle)*(width)},
+    ];
+
+    can.polygon({points:points, fill:"rgb(150, 203, 217)", stroke:"rgb(150, 203, 217)"}).addTo(stage);
+}
+var test = function () {
+    stage = can.stage(document.getElementsByTagName("canvas")[0]);
+    stage.width(1000).height(1000);
+    var rays = 10;
+    for (var i=0;i<rays;i++)
+        rombus(stage.width(), stage.height(), (i*Math.PI*2/rays)+(Math.PI/2));
+
+    var count = 0;
+    function run () {
+        count++;
+        if (count == 2)
+            stage.draw();
+    }
+
+    var ball = can.image({
+        image : "images/pokeball.png",
+        x : stage.width()/2,
+        y : stage.height()/2,
+        align : "center",
+        load : function () {
+            run();
+        },
+        error : function () {
+            alert("image didn't load!");
+        },
+    }).addTo(stage);
+    run();
+}
+window.addEventListener("load", test, false);
+    --></script>
+</head>
+<body>
+    <canvas></canvas>
+</body>
+</html>

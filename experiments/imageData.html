@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ImageData Test</title>
+        <meta charset="utf-8" />
+
+        <style type="text/css">
+#src {
+    visibility:hidden;
+    height: 0px;}
+
+td  {border: 1px solid black;}
+        </style>
+
+        <script type="text/javascript">
+window.addEventListener("load", function () {
+    var a = document.getElementById("a");
+    var b = document.getElementById("b");
+    var c = document.getElementById("c");
+    var d = document.getElementById("d");
+    var e = document.getElementById("e");
+    var f = document.getElementById("f");
+
+    function img () {
+        var img=document.getElementById("src");
+        a.getContext("2d").drawImage(img,10,10);
+    }
+    d.addEventListener("click", img, false);
+
+    function imgData () {
+        var imgData=a.getContext("2d").getImageData(0, 0, 1000, 1000);
+        b.getContext("2d").putImageData(imgData, 0, 0);
+    }
+    e.addEventListener("click", imgData, false);
+
+
+    function imgDataAlt () {
+        var imgData = a.getContext("2d").getImageData(0, 0, 1000, 1000);
+        ctx = c.getContext("2d")
+        ctx.rotate(Math.PI/40);
+
+        //ctx.drawImage(document.getElementById("a"), 0, 0); // works
+
+        //ctx.drawImage(imgData, 0, 0); // doesn't work
+
+        var can = document.createElement("canvas");
+        can.width = imgData.width;
+        can.height = imgData.height;
+        can.getContext("2d").putImageData(imgData, 0, 0);
+        ctx.drawImage(can, 0, 0);
+    }
+    f.addEventListener("click", imgDataAlt, false);
+}, false);
+        </script>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <td><canvas id="a"></canvas></td>
+                <td><canvas id="b"></canvas></td>
+                <td><canvas id="c"></canvas></td>
+            </tr>
+            <tr>
+                <td><button id="d">Load Image</button></td>
+                <td><button id="e">Load from Other Canvas</button></td>
+                <td><button id="f">Load Image Data as Image</button></td>
+            </tr>
+        </table>
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAIAAADYYG7QAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIKSURBVHjaYvz//z/DYAIAAcTEMMgAQACxYAoxMjLC2cSEH3XVAwQQC6bSF6Kih16/RhbBZQ0t1AMEEBOyaqAwEImbmNiJikIEV4ERsp9orR4ggECugwAGsOr/np4gjqcn0B9ABNEA8QQaoJF6gABihCiFOB8KPD1fnjkDYcLDNgw1YGmnHiCAsDkIyIWFJxzgs4Cq6gECiAlNEYQBlNu9e3cYkmosaYI26gECiAk5MTHCtO3ZsweuFIiAmjEtoJF6gABihAcsKFSR2AxI6lxdXTFzMo3UAwQQ9pIani+IBFRUDxBAjGhJjwE1AIFuJ1jQUVc9QAAxYg3bAaw6AAKIcbDV9gABNOhqe4AAGnQOAgigQecggACiQnuIVIDffIAAoqg9RJ5T8JsPEEDkt4fIcA0x5gMEEEYa8vRk2LYNogeujZqAkPkAAURme4i84CHGfIAAIrM9RJGD8JoPEEDkt4dIdhNx5gMEEPntIVIBkeYDBBD57SFyYo0I8wECiDrtITJCC5f5AAFEUXuIvIIRv/kAAUSF9hB1qw6AABp07SGAABp0tT1AAA06BwEE0KBzEEAADbrxIYAAGnTjQwABNOjGhwACaNCNDwEE0KAbHwIIoEE3PgQQQINufAgggAbd+BBAAA268SGAABp040MAATToxocAAmjQjQ8BBNCgaw8BBNCgq+0BAgwAnVoBjAo1LQ4AAAAASUVORK5CYII=" id="src" origin="anonymous" />
+    </body>
+</html>

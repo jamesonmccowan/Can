@@ -1,0 +1,148 @@
+restructure add to be based in group and have objects call their new parent's add function
+ - setStage
+
+the half offset for shapes seems to cause rect to be blury on the edges for
+{x : 10, y : 10, width : 10, height : 10, fill : "red"}
+but makes the stroke sharp and clear
+{x : 10, y : 10, width : 10, height : 10, stroke : "red"}
+
+rotate.html highlights some issues
+
+
+------------------------------------------------------------------------
+isvalid
+proto
+
+
+Animation = {
+    constructor (how, config)
+    apply (target) // sets this.start to target and creates a setInterval, then calls this.start
+    pause
+    resume
+    cancel
+    repeat
+    
+Can // most functions return "this" as to allow chaining
+    constructor
+    find // returns this can object if the id matchies its own
+    beginDraw
+    endDraw
+    position // if coordinates are given, find how far away from them it is
+    offset // returns {x,y} for top left corner, or sets offset if x, y passed to it
+    move
+    width // sets or returns width
+    height // sets or returns height
+    isOffScreen // checks if outside current container, runs offScreen if true
+    distance // distance from this object to another 
+      - may need to account for objects in separate containers
+    imageData // get an imageData object of the Can object
+    rotateTo
+    rotateBy
+    sendForward
+    sendBackward
+    sendToFront
+    sendToBack
+    visible // sets or returns visibility
+    toggleVisible
+    on 
+    off // remove an event from this object
+    addTo // adds object to container object
+      - transfer events
+    remove // removes object from it's parent container
+      - transfer events
+      - add return this
+    setStage // sets the canvas element this object uses
+    animate (how, config) // animates this object(?) // (new Animation(how, config)).apply(this)
+
+each_line // helper function that sets up the string and gets measurements before the real work is done
+text
+    constructor
+    setStage
+    draw
+    width
+    height
+    line
+    lines
+    text
+
+Shape  // super object for other shapes, used to deal with a pixel issue
+    constructor
+    beginDraw
+    endDraw
+    
+Rect
+    constructor
+    draw
+    - check that null style works the way this seems to think it does
+
+Line
+    constructor
+    draw
+    - what happens on linewidth 0
+
+CannedImage
+    constructor
+    draw
+
+Tile
+    constructor
+    draw
+
+Oval
+    constructor
+    draw
+
+Arc
+    constructor
+    draw
+
+Graph
+    constructor
+    draw
+    - test null textx/y
+
+Group
+    constructor
+    find
+    add // takes a single, or a list
+    remove // takes one element and removes it, or removes itself from its parent when no argument is passed to it
+    - make consistent with add's list feature
+    width // calculates the width by the width and placement of all the contained items
+    height // calculates the height by the width and placement of all the contained items
+    setStage // sets the stage for itself and all its cans
+    getImageData
+    draw
+    clear // deletes all cans and events from this group
+
+Sprite // container for frames, manages timing too
+    constructor
+    setStage
+    draw
+    width 
+    height
+    
+Category  // database of can objects, displays only current item
+    constructor
+    find
+    setStage
+    get
+    draw
+    select
+    add
+    width
+    height
+
+Stage // actual canvas element wrapped in a group
+    constructor
+    width // sets or returns the canvas's width
+    height  // sets or returns the canvas's height
+    draw
+    clear
+
+Buffer // another group
+    constructor
+    draw
+
+
+
+align, angle, alpha, composite
