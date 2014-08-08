@@ -8,93 +8,104 @@
     <script type="text/javascript" src="scripts/can.js"></script>
     <script type="text/javascript"><!--
 var test = function () {
-    can.screen.fitWindow();
-    var back = can.create.rect(0, 0, can.width, can.height, "#fff");
+    var stage = can.stage(document.getElementsByTagName("canvas")[0]);
+    stage.fitWindow();
+    var back = can.rect({x:0, y:0, width:stage.width(), height:stage.height(), fill:"#fff"});
+    stage.add(back);
 
-    var mousedrag = can.create.text("Mouse Drag", 10, 10, null, null, "#00a");
-    mousedrag.setEvent("mousedown", function (e) {
+    var mousedrag = can.text({str:"Mouse Drag", x:10, y:10, fill:"#00a"});
+    stage.add(mousedrag);
+    mousedrag.on("mousedown", function (e) {
         this.xs = e.x;
         this.ys = e.y;
     });
-    mousedrag.setEvent("mousedrag", function (e) {
-        this.setString("DRAGGED!");
-        this.style = "#f00";
-        this.moveBy(e.x-this.xs, e.y-this.ys);
+    mousedrag.on("mousedrag", function (e) {
+        this.text("DRAGGED!");
+        this.fill = "#f00";
+        this.move(e.x-this.xs, e.y-this.ys);
         this.xs = e.x;
         this.ys = e.y;
-        can.draw();
     });
 
-    var click = can.create.text("Click", 10, 40, null, null, "#00a");
+    var click = can.text({str:"Click", x:10, y:40, fill:"#00a"});
+    stage.add(click);
     var clickCount = 0;
-    click.setEvent("click", function (e) {
-        this.setString("CLICKED! (" + (++clickCount) + ")");
-        this.style = "#f00";
-        can.draw();
+    click.on("click", function (e) {
+        this.text("CLICKED! (" + (++clickCount) + ")");
+        this.fill = "#f00";
+        stage.draw();
     });
 
-    dblclick = can.create.text("Double Click", 10, 70, null, null, "#00a");
+    dblclick = can.text({str:"Double Click", x:10, y:70, fill:"#00a"});
+    stage.add(dblclick);
     var dblclickCount = 0;
-    dblclick.setEvent("dblclick", function (e) {
-        this.setString("Double CLICKED! (" + (++dblclickCount) + ")");
-        this.style = "#f00";
-        can.draw();
+    dblclick.on("dblclick", function (e) {
+        this.text("Double CLICKED! (" + (++dblclickCount) + ")");
+        this.fill = "#f00";
+        stage.draw();
     });
 
-    var mouseenter = can.create.text("Mouse Enter", 10, 100, null, null, "#00a");
-    mouseenter.setEvent("mouseenter", function (e) {
-        this.setString("Mouse Entered!");
-        this.style = "#f00";
-        can.draw();
+    var mouseenter = can.text({str:"Mouse Enter", x:10, y:100, fill:"#00a"});
+    stage.add(mouseenter);
+    mouseenter.on("mouseenter", function (e) {
+        this.text("Mouse Entered!");
+        this.fill = "#f00";
+        stage.draw();
     });
 
-    var mouseleave = can.create.text("Mouse Leave", 10, 130, null, null, "#00a");
-    mouseleave.setEvent("mouseleave", function (e) {
-        this.setString("Mouse Left!");
-        this.style = "#f00";
-        can.draw();
+    var mouseleave = can.text({str:"Mouse Leave", x:10, y:130, fill:"#00a"});
+    stage.add(mouseleave);
+    mouseleave.on("mouseleave", function (e) {
+        this.text("Mouse Left!");
+        this.fill = "#f00";
+        stage.draw();
     });
 
-    var mousedown = can.create.text("Mouse Down", 10, 160, null, null, "#00a");
-    mousedown.setEvent("mousedown", function (e) {
-        this.setString("Mouse Press!");
-        this.style = "#f00";
-        can.draw();
+    var mousedown = can.text({str:"Mouse Down", x:10, y:160, fill:"#00a"});
+    stage.add(mousedown);
+    mousedown.on("mousedown", function (e) {
+        this.text("Mouse Press!");
+        this.fill = "#f00";
+        stage.draw();
     });
 
-    mousemoves = can.create.text("Mouse Move", 10, 190, null, null, "#00a");
-    back.setEvent("mousemove", function (e) {
-        mousemoves.setString("(x: " + e.x + ", y: " + e.y + ")");
-        mousemoves.style = "#000";
-        can.draw();
+    mousemoves = can.text({str:"Mouse Move", x:10, y:190, fill:"#00a"});
+    stage.add(mousemoves);
+    back.on("mousemove", function (e) {
+        mousemoves.text("(x: " + e.x + ", y: " + e.y + ")");
+        mousemoves.fill = "#000";
+        stage.draw();
     });
 
-    var mouseup = can.create.text("Mouse Up", 10, 220, null, null, "#00a");
-    mouseup.setEvent("mouseup", function (e) {
-        this.setString("Mouse Up!");
-        this.style = "#f00";
-        can.draw();
+    var mouseup = can.text({str:"Mouse Up", x:10, y:220, fill:"#00a"});
+    stage.add(mouseup);
+    mouseup.on("mouseup", function (e) {
+        this.text("Mouse Up!");
+        this.fill = "#f00";
+        stage.draw();
     });
 
-    var offscreen = can.create.text("offscreen (click to test)", 10, 250, null, null, "#00a");
-    offscreen.setEvent("offscreen", function (e) {
-        this.setString("Is Off Screen!");
-        this.style = "#f00";
+    var offscreen = can.text({str:"offscreen (click to test)", x:10, y:250, fill:"#00a"});
+    stage.add(offscreen);
+    offscreen.on("offscreen", function (e) {
+        this.text("Is Off Screen!");
+        this.fill = "#f00";
         alert(this.str);
-        this.moveTo(10, 250);
+        this.offset(10, 250);
         this.remove();
     });
-    offscreen.setEvent("click", function (e) {
-        this.moveTo(0,-30);
-        can.draw();
+    offscreen.on("click", function (e) {
+        this.offset(0,-30);
+        stage.draw();
     });
 
 
-    can.draw();
+    stage.draw();
 }
+window.addEventListener("load", test, false);
     --></script>
 </head>
-<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+<body>
     <canvas></canvas>
 </body>
 </html>

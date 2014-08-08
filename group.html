@@ -11,42 +11,48 @@ body    {background: black;}
     <script type="text/javascript" src="scripts/can.js"></script>
     <script type="text/javascript"><!--
 var test = function () {
-    can.screen.fitWindow();
-    var group = can.create.group(40, 40, 100, 100);
-    var r = can.create.rect(10, 10, 10, 10, "red");
-    var t = can.create.text("Click to Spin!\nDrag to Move!", 50, 50, 150, null, "white", "center");
-    r.remove();
+    var stage = can.stage(document.getElementsByTagName("canvas")[0]);
+    stage.fitWindow();
+    var group = can.group({x:40, y:40, width:100, height:100});
+    var r = can.rect({x:10, y:10, width:10, height:10, fill:"red", stroke:"green"});
+    var g = can.rect({x:25, y:10, width:10, height:10, stroke:"green"});
+    var b = can.rect({x:40, y:10, width:10, height:10, fill:"red"});
+    var t = can.text({str:"Click to Spin!\nDrag to Move!", x:30, y:30, width:150, fill:"white", align:"center"});
     r.addTo(group);
-    t.remove();
+    g.addTo(group);
+    b.addTo(group);
     t.addTo(group);
-    can.draw();
+    stage.add(group);
+    stage.draw();
 
     var id = 0;
-    group.setEvent("click", function () {
+    group.on("click", function () {
         if (id == 0) {
             id = setInterval(function () {
                 group.rotateBy(1/16);
-                can.draw();
+                stage.draw();
             }, 1000/60);
         } else {
             clearInterval(id);
             id = 0;
         }
     });
-    group.setEvent("mousedown", function (e) {
+    group.on("mousedown", function (e) {
         this.xs = e.x;
         this.ys = e.y;
     });
-    group.setEvent("mousedrag", function (e) {
-        this.moveBy(e.x-this.xs, e.y-this.ys);
+    group.on("mousedrag", function (e) {
+        this.move(e.x-this.xs, e.y-this.ys);
         this.xs = e.x;
         this.ys = e.y;
-        can.draw();
+        stage.draw();
     });
 }
+
+window.addEventListener("load", test, false);
     --></script>
 </head>
-<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+<body>
     <canvas></canvas>
 </body>
 </html>

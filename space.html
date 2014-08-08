@@ -11,25 +11,26 @@ body    {background: black;}
     <script type="text/javascript" src="scripts/can.js"></script>
     <script type="text/javascript"><!--
 start = function () {
-    can.screen.fitWindow();
-    can.draw();
-    var group = can.create.group((can.width/2)-200, (can.height/2)-200, 400, 400);
-    group.setEvent("mousedown", function (e) {
+    stage.fitWindow();
+    var group = can.group({x:(stage.width()/2)-200, y:(stage.height()/2)-200, width:400, height:400});
+    stage.add(group);
+    group.on("mousedown", function (e) {
         this.xs = e.x;
         this.ys = e.y;
     });
-    group.setEvent("mousedrag", function (e) {
-        this.moveBy(e.x-this.xs, e.y-this.ys);
+    group.on("mousedrag", function (e) {
+        this.move(e.x-this.xs, e.y-this.ys);
         this.xs = e.x;
         this.ys = e.y;
     });
 
     var step = function () {
-        this.oval.width += this.growth;
-        this.oval.height += this.growth;
-        var mod = this.speed*this.oval.width/2;
-        this.oval.moveBy(this.x*mod, this.y*mod);
+        this.oval.w += this.growth;
+        this.oval.h += this.growth;
+        var mod = this.speed*this.oval.w/2;
+        this.oval.move(this.x*mod, this.y*mod);
     }
+    group.add(can.rect({x:0,y:0,width:400,height:400,fill:"transparent",stroke:"transparent"}));
 
     var stars = [];
     function star () {
@@ -46,10 +47,11 @@ start = function () {
             "speed" : speed,
             "growth" : growth,
             "step" : step,
-            "oval" : can.create.oval(group.x+(group.width/2), group.y+(group.height/2), 2, null, "white"),
+            "oval" : can.oval({x:group.x+(group.w/2), y:group.y+(group.h/2), width:2, height:2, fill:"white"}),
 //"rgb(" + (128+Math.floor(Math.random()*128)) + ", " + (128+Math.floor(Math.random()*128)) + "," + (128+Math.floor(Math.random()*128)) + ")"),
         };
-        star.oval.setEvent("offscreen", function (e) {
+        stage.add(star.oval);
+        star.oval.on("offscreen", function (e) {
             this.remove();
             star.oval = null;
         });
@@ -57,7 +59,9 @@ start = function () {
         stars.push(star);
     }
     
-    fps = can.create.text("FPS: ", 10, 10, null, null, "gray");
+    fps = can.text({str:"FPS: ", x:10, y:10, fill:"gray"});
+    stage.add(fps);
+
     time = [];
     function space () {
         star();
@@ -79,15 +83,20 @@ start = function () {
                 i--;
             }
         }
-        can.draw();
+        stage.draw();
         setTimeout(space, 1);
         return true;
     }
     setTimeout(space, 1);
 }
+
+window.addEventListener("load", function () {
+    stage = can.stage(document.getElementsByTagName("canvas")[0]);
+    start();
+}, false);
     --></script>
 </head>
-<body onload='can.init(document.getElementsByTagName("canvas")[0]);start()'>
+<body>
     <canvas></canvas>
 </body>
 </html>

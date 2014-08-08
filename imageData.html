@@ -11,19 +11,18 @@ body    {background: white;}
     <script type="text/javascript" src="scripts/can.js"></script>
     <script type="text/javascript"><!--
 var test = function () {
-    can.screen.fitWindow();
+    var stage = can.stage(document.getElementsByTagName("canvas")[0]);
+    stage.fitWindow();
 
-    var group = can.create.group(40, 40, 100, 100);
+    var group = can.group({x:40, y:40, width:100, height:100, parent:stage});
 
-    var rect = can.create.rect(0, 0, 100, 100, "black");
-    rect.remove();
-    rect.addTo(group);
+    var rect = can.rect({x:0, y:0, width:100, height:100, fill:"black", parent:group});
 
-    var img = can.vas.getContext("2d").createImageData(100, 100);
+    var img = stage.canvas.getContext("2d").createImageData(100, 100);
     for (var i=0;i<img.data.length;i++)
         img.data[i] = Math.floor(Math.random()*256);
 
-    var data = can.create.imageData(img, 10, 10);
+    var data = stage.getImageData(img, 10, 10);
     data.remove();
     data.addTo(group);
 

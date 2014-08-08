@@ -11,31 +11,33 @@ body    {background: black;}
     <script type="text/javascript" src="scripts/can.js"></script>
     <script type="text/javascript"><!--
 var test = function () {
-    can.screen.fitWindow();
-    can.create.rect(10, 10, 10, 10, "red");
-    can.create.text("[Click to Spin]", 10, 10, 150, null, "white");
-    var w = can.create.wrappedText("a involved test of text wrapping for demo purposes", 160, 10, 200, 10, "blue");
-    can.create.framedRect(10, 40, 100, 10, "green", 4);
-    can.create.roundedRect(150, 40, 50, 50, "blue", 10);
-    can.create.framedText("T", 160, 40, 200, 40, "black");
-    can.create.image("images/bg.jpg", 110, 100, 200, 200);
-    can.create.line(100, 80, 10, 170, "white", 4);
-    can.create.framedOval(205, 40, 45, 35, "green", 4);
-    can.create.oval(220, 50, 15, null, "blue");
-    can.create.arc(280, 40, 25, 0, Math.PI, "red", 5);
-    can.create.filledArc(290, 50, 15, Math.PI, 1.5*Math.PI, "red");
-    can.draw();
+    stage.fitWindow();
+    stage.add(can.rect({x:10, y:10, width:10, height:10, fill:"red"}));
+    stage.add(can.text({str:"[Click to Spin]", x:10, y:14, maxWidth:150, size:20, fill:"white"}));
+    var w = can.text({str:"a involved test of text wrapping for demo purposes", wrap:true, x:160, y:10, maxWidth:200, size:10, fill:"blue"});
+    stage.add(w);
+    stage.add(can.rect({x:10, y:40, width:100, height:10, stroke:"green", lineWidth:4}));
+    stage.add(can.rect({x:150, y:40, width:50, height:50, fill:"blue", radius:10}));
+    stage.add(can.text({str:"T", x:160, y:47, width:200, height:40, stroke:"black", lineWidth:1, size: 40}));
+    stage.add(can.image({image:"images/bg.jpg", x:110, y:100, width:200, height:200}));
+    stage.add(can.line({x:100, y:80, x2:10, y2:170, style:"white", lineWidth:4}));
+    stage.add(can.oval({x:205, y:40, width:45, height:35, stroke:"green", lineWidth:4}));
+    stage.add(can.oval({x:220, y:50, width:15, fill:"blue"}));
+    stage.add(can.arc({x:280, y:40, r:25, start:0, end:Math.PI, stroke:"red", lineWidth:5}));
+    stage.add(can.arc({x:290, y:50, r:15, start:Math.PI, end:1.5*Math.PI, fill:"red"}));
+    stage.draw();
 
     var id = 0;
-    var back = can.create.rect(0, 0, can.width, can.height, "black");
+    var back = can.rect({x:0, y:0, width:stage.width(), height:stage.height(), fill:"black"});
+    stage.add(back);
     back.sendToBack();
-    back.setEvent("click", function () {
+    back.on("click", function () {
         if (id == 0) {
             id = setInterval(function () {
-                for (var i=1;i<can.cans.length;i++) {
-                    can.cans[i].rotateBy(1/16);
+                for (var i=1;i<stage.cans.length;i++) {
+                    stage.cans[i].rotateBy(1/16);
                 }
-                can.draw();
+                stage.draw();
             }, 1000/60);
         } else {
             clearInterval(id);
@@ -43,11 +45,16 @@ var test = function () {
         }
     });
 
-    w.setEvent("click", function () {alert(this.height);});
+    w.on("click", function () {alert(this.height);});
 }
+
+window.addEventListener("load", function () {
+    stage = can.stage(document.getElementsByTagName("canvas")[0]);
+    test();
+}, false);
     --></script>
 </head>
-<body onload='can.init(document.getElementsByTagName("canvas")[0]);test()'>
+<body>
     <canvas></canvas>
 </body>
 </html>
