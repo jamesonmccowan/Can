@@ -1,0 +1,49 @@
+body {
+    font-family: arial;
+    margin: 0px;
+    padding: 0px;
+    background: #666;}
+
+h1 {text-align: center;
+    margin: 0px;
+    padding: 0px;}
+
+#bar {
+    background: #fff;}
+
+canvas {
+    background: url(sketchpad.bg.png);
+    margin: 0px;
+    padding: 0px;}
+
+#bar ul {
+    display: none;}
+
+
+.frame {
+    background: #aaa;
+    margin: 10px;
+    display: table;
+    position: relative;
+    border: 2px outset #aaa;}
+
+.header {
+    background: #aea;
+    font-weight: bold;
+    padding: 0px 5px;
+    cursor: pointer;}
+
+.box {
+    background: #aaa;
+    margin: 2px;
+    border: 1px inset #aaa;}
+
+.box td, .box th {
+    padding: 0px 3px;
+    border: 1px outset #8ae;
+    background: #ccc;}
+
+#canvas {cursor: se-resize;}
+#canvas .box {
+    background: #fff;
+    cursor: default;}

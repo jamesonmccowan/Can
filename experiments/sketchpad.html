@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Can - sketchpad</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" rel="stylesheet" href="sketchpad.css" />
+    <style type="text/css">
+    </style>
+    <script type="text/javascript" src="../scripts/can.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="sketchpad.js">
+    </script>
+</head>
+<body>
+    <div style="display: none;">
+        <h1>Developer Notes:</h1>
+        What we want:
+        <ul>
+            <li>An easy to use, powerful, and intuitive drawing program</li>
+            <li>Layers manager</li>
+            <li>Objects manager - may need an object mode, because some behaviors might not work without turning the objects into single images.</li>
+            <li>History manager</li>
+            <li>Colors - have last 5 used colors, with a (push selected) option to get colors that you haven't used on it</li>
+            <li>Canvas is stretchable</li>
+        </ul>
+    </div>
+    <div id="bar">
+        <table id="menu">
+            <tr>
+                <td>File</td>
+                <td>Edit</td>
+                <td>View</td>
+                <td>Help</td>
+            </tr>
+            <tr>
+                <td>
+                    <ul>
+                        <li>New</li>
+                        <li>Load</li>
+                        <li>Save</li>
+                        <li>Close</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Undo</li>
+                        <li>Redo</li>
+                        <li>Cut</li>
+                        <li>Copy</li>
+                        <li>Paste</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>Toolbars</li>
+                        <li>Zoom In</li>
+                        <li>Zoom Out</li>
+                        <li>Reset</li>
+                        <li>Fit Screen</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>About</li>
+                    </ul>
+                </td>
+            </tr>
+        </table>
+
+        </div>
+        <div id="context">
+        </div>
+    </div>
+
+    <div class="frame" id="canvas">
+        <div class="header">Canvas</div>
+        <div class="box">
+            <canvas id="stage"></canvas>
+        </div>
+    </div>
+
+    <div class="frame" id="tools">
+        <div class="header">Tools</div>
+        <table class="box">
+            <tr>
+                <th>Brush</th>
+                <th>Pencle</th>
+                <th>Eracer</th>
+                <th>Stamp</th>
+            </tr>
+            <tr>
+                <th>Magnify</th>
+                <th>Fill</th>
+                <th>Polygon</th>
+                <th>Select</th>
+            </tr>
+            <tr>
+                <th>Text</th>
+                <th>Group</th>
+                <th>Shapes</th>
+                <th>Transform</th>
+            </tr>
+        </table>
+    </div>
+
+    <div class="frame" id="colors">
+        <div class="header">Colors</div>
+        <table class="box">
+            <table>
+                <tr>
+                    <td id="c1" style="width: 1.25in; height: 1.25in; background-color: #000;" colspan="4"><h1>1</h1></td>
+                    <td rowspan="2">
+                    	R<input type="range" id="ri" min="0" max="255" style="width: 1.5in;" value="0" />
+                        <span id="ro">000</span><br />
+
+	                    G<input type="range" id="gi" min="0" max="255" style="width: 1.5in;" value="0" />
+                        <span id="go">000</span><br />
+
+                    	B<input type="range" id="bi" min="0" max="255" style="width: 1.5in;" value="0" />
+                        <span id="bo">000</span><br />
+
+                    	<hr />
+
+                    	<input id="text" value="#FFFFFF"/>
+                    	<button type="button" id="sethex">Set</button>
+
+                    	<hr />
+
+                    	<input type="color" id="colorselect"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th id="c2" style="background-color: #fff;">2</th>
+                    <th id="c3" style="background-color: #f00;">3</th>
+                    <th id="c4" style="background-color: #0f0;">4</th>
+                    <th id="c5" style="background-color: #00f;">5</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+</body>
+</html>
