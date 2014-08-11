@@ -22,10 +22,10 @@ var sketchpad = {
         this.stage = stage;
         this.stage.parent = this.stage;
         stage.on("mousedrag", function (e) {
-            sketchpad.paint.brush(e.x, e.y); 
+            sketchpad.paint.chainMove(e.x, e.y); 
         });
         stage.on("mousedown", function (e) {
-            sketchpad.paint.brush(e.x, e.y); 
+            sketchpad.paint.chainStart(e.x, e.y); 
         });
         this.coloring.init();
     },
@@ -92,6 +92,21 @@ var sketchpad = {
         menu : function () {},
     },
     paint : {
+        chainStart : function (x, y) {
+            this.chain = can.chain({
+                points : [{x : x, y : y}],
+                lineWidth : this.width,
+                lineJoin : "round",
+                lineCap : "round",
+                style : sketchpad.coloring.colors[0]
+            });
+            sketchpad.stage.add(this.chain);
+            sketchpad.stage.draw();
+        },
+        chainMove : function (x, y) {
+            this.chain.points.push({x:x,y:y});
+            sketchpad.stage.draw();
+        },
         brush : function (x, y) {
             var r = this.width/2;
             sketchpad.stage.add(can.circle({
@@ -152,10 +167,10 @@ window.addEventListener("load", function() {
             var c = document.getElementById("canvas");
             var s = document.getElementById("stage");
             var rect = c.getBoundingClientRect();
-            c.style.width = (e.clientX-rect.left)+"px";
-            c.style.height = (e.clientY-rect.top)+"px";
-            sketchpad.stage.width(e.clientX-rect.left-5);
-            sketchpad.stage.height(e.clientY-rect.top-25);
+            c.style.width = (e.clientX-rect.left-2)+"px";
+            c.style.height = (e.clientY-rect.top-2)+"px";
+            sketchpad.stage.width(e.clientX-rect.left-7);
+            sketchpad.stage.height(e.clientY-rect.top-30);
             sketchpad.stage.draw();
         }
     }, false);

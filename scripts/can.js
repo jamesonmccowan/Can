@@ -1071,6 +1071,64 @@ var can = (function () {
         }
     });
 
+    var Chain = proto([Shape], {
+        constructor : function Chain (config) {
+            config = config||{};
+
+            var points = config.points;
+            if (!points) {
+                throw new Error("Points required to build a Chain.");
+            }
+            if (points.length >= 1
+            && typeof points[0].x=="number" && typeof points[0].y=="number"){
+                var x = 0;//points[0].x;
+                var y = 0;//points[0].y;
+                for (var i=1;i<points.length;i++) {
+                    if (points[i].x < x)
+                        x = points[i].x;
+                    if (points[i].y < y)
+                        y = points[i].y;
+                }
+                var width = points[0].x - x;
+                var height = points[0].y - y;
+                /*for (var i=0;i<points.length;i++) {
+                    points[i].x -= x;
+                    points[i].y -= y;
+                    if (points[i].x > width)
+                        width = points[i].x;
+                    if (points[i].y > height)
+                        height = points[i].y;
+                }*/
+            } else
+                throw new Error("Points error: not structured correctly");
+    
+            Shape.call(this, config);
+            
+            this.points = points;
+            this.x = x;
+            this.y = y;
+            this.lineJoin = config.lineJoin||"miter"; // bevel|round|miter
+            this.lineCap = config.lineCap||"square"; // butt|round|square
+            this.miterLimit = config.miterLimit||10;
+            this.w = width;
+            this.h = height;
+            this.style = config.style||"#000";
+            this.lineWidth = parseFloat(config.lineWidth)||1;
+        },
+        draw : function (ctx) {
+            ctx.beginPath();
+            ctx.moveTo(this.points[0].x, this.points[0].y);
+            for (var i=1;i<this.points.length;i++)
+                ctx.lineTo(this.points[i].x, this.points[i].y);
+            ctx.strokeStyle = this.style;
+            ctx.lineJoin = this.lineJoin;
+            ctx.lineCap = this.lineCap;
+            ctx.miterLimit = this.miterLimit;
+            ctx.lineWidth = this.lineWidth;
+            ctx.stroke();
+        }
+    });
+
     var Graph = proto([Can], {
         constructor : function Graph (config) {
             config = config||{};
@@ -1856,6 +1914,9 @@ var can = (function () {
         },
         polygon : function (config) {
             return new Polygon(config);
+        },
+        chain : function (config) {
+            return new Chain(config);
         },
         graph : function (config) {
             return new Graph(config);

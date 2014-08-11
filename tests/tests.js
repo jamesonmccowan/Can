@@ -34,7 +34,7 @@ new Test({
     failure : "tests are out of date or problems with can",
     run : function () {
         var ret = true;
-        var crash = ["proto", "animation", "rect", "line", "oval", "circle", "arc", "polygon", "graph"];
+        var crash = ["proto", "animation", "rect", "line", "oval", "circle", "arc", "polygon", "chain", "graph"];
         var obj = ["types", "fx"];
         var pass = ["can", "text", "shape", "image", "group", "tile", "sprite", "category", "buffer", "stage"];
         var info = this.info;
@@ -963,6 +963,127 @@ new Test({
         return ret;
     }
 });
+
+/*    can.chain({points: [
+            {x:10, y:10},
+            {x:10, y:50},
+            {x:50, y:50},
+            {x:50, y:10},
+            {x:20, y:10},], style:"rgb(150, 203, 217)"}).addTo(stage);
+
+    can.chain({points: [
+            {x:110, y:110},
+            {x:110, y:150},
+            {x:150, y:150},
+            {x:150, y:110},
+            {x:120, y:110},], style:"rgb(150, 203, 217)"}).addTo(stage);
+*/
+new Test({
+    title : "chain test 1",
+    description : "Test chain object creation",
+    success : "Canvas was changed by draw event and colored correctly.",
+    failure: "Canvas was not changed by draw.",
+    setup : function () {
+        this.stage = can.stage({width: 100, height: 100});
+        this.snapshots.push(this.stage.getImageData());
+    },
+    run : function () {
+        var color = randomColor();
+        this.stage.add(can.chain({
+            points: [
+                {x : 10, y : 10},
+                {x : 90, y : 10},
+                {x : 90, y : 90},
+                {x : 10, y : 90},
+            ],
+            style : "rgb("+(color.r)+","+color.g+","+color.b+")"}));
+        this.stage.draw();
+        this.snapshots.push(this.stage.getImageData());
+
+        if (equalImages(this.snapshots[0], this.snapshots[1])) {
+            return false;
+        }
+
+        this.snapshots.push(
+                difference(this.snapshots[0], this.snapshots[1]));
+
+        if (!detectColor(this.snapshots[1], color)) {
+            this.f = "Created chain, but wrong color";
+            this.info.push("this could be because the canvas insists on stroking between pixels for some reason, which can cause bluring of color");
+            return false;
+        }
+
+        return true;
+    }
+});
+
+new Test({
+    title : "chain test 2",
+    description : "Test chain object features",
+    success : "Canvas was changed by draw event and colored correctly.",
+    failure: "One or more features of polygon failed to change as expected",
+    setup : function () {
+        this.stage = can.stage({width: 100, height: 100});
+    },
+    run : function () {
+        var c1 = randomColor();
+        var c2 = randomColor();
+        var ret = true;
+        var self = this;
+        var chain = can.chain({
+            points: [
+                {x : 10, y : 10},
+                {x : 90, y : 10},
+                {x : 90, y : 90},
+                {x : 10, y : 90},
+            ],
+            style : "rgb("+(c1.r)+","+c1.g+","+c1.b+")"});
+        this.stage.add(chain);
+        this.stage.draw();
+        this.snapshots.push(this.stage.getImageData());
+
+        function onChange(s, f) {
+            self.stage.draw();
+            self.snapshots.push(self.stage.getImageData());
+            var l = self.snapshots.length;
+            if (equalImages(self.snapshots[l-2], self.snapshots[l-1])) {
+                self.info.push(f);
+                ret = false;
+            } else {
+                self.info.push(s);
+            }
+        }
+        
+        chain.points.push({x:40, y:40});
+        onChange("adding a point works", "adding a point doesn't work");
+
+        chain.points.pop();
+        onChange("removing a point works", "removing a point doesn't work");
+
+        var swap = chain.points[2];
+        chain.points[2] = chain.points[3];
+        chain.points[3] = swap;
+        onChange("swapping points works", "swapping points doesn't work");
+
+        chain.lineWidth = chain.lineWidth*10;
+        onChange("changing lineWidth works", "changing lineWidth doesn't work");
+
+        chain.style = "rgb("+(c2.r)+","+c2.g+","+c2.b+")";
+        onChange("changing style works", "changing style doesn't work");
+
+        chain.miterLimit = 2;
+        onChange("changing miterLimit works", "changing miterLimit doesn't work");
+
+        chain.lineCap = "round";
+        onChange("changing lineCap works", "changing lineCap doesn't work");
+
+        chain.lineJoin = "round";
+        onChange("changing lineJoin works", "changing lineJoin doesn't work");
+
+        return ret;
+    }
+});
+
 
 new Test({
     title : "graph test 1",
