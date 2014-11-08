@@ -242,23 +242,23 @@ new Test({
         onChange("Changing textAlign to left works",
                 "changing textAlign to left doesn't work");
 
-        text.font = "Comic Sans";
-        onChange("changing font works", "changing font doesn't work");
-
-        text.bold = true;
-        onChange("setting bold works", "setting bold doesn't work");
-
         text.italic = true;
-        onChange("setting italic works", "setting italic doesn't work");
+        onChange("Setting italic works", "Setting italic doesn't work");
 
         text.underline = true;
-        onChange("setting underline works", "setting underline doesn't work");
+        onChange("Setting underline works", "Setting underline doesn't work");
+
+        text.bold = true;
+        onChange("Setting bold works", "Setting bold doesn't work");
+
+        text.font = "Calibri";
+        onChange("Changing font works", "Changing font doesn't work");
 
         // this is here just to see how underline handles it
         text.stroke = "rgb("+(c2.r)+","+c2.g+","+c2.b+")";
         text.maxWidth = text.width()/2;
         text.wrap = true;
-        onChange("setting stroke works", "setting stroke doesn't work");
+        onChange("Setting stroke works", "Setting stroke doesn't work");
 
         return ret;
     }
@@ -342,7 +342,7 @@ new Test({
         onChange("setting height works", "setting height doesn't work");
 
         rect.radius = 10;
-        onChange("setting radiusr works", "setting radiusr doesn't work");
+        onChange("setting radius works", "setting radius doesn't work");
 
         rect.fill = "rgb("+(c2.r)+","+c2.g+","+c2.b+")";
         onChange("changing fill works", "changing fill doesn't work");

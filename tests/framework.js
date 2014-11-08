@@ -291,6 +291,7 @@ var framework = {
     },
 
     buildList : function () {
+        atList = true;
         var body = document.getElementsByTagName("body")[0];
         body.innerHTML = "";
         var table = document.createElement("table");
@@ -333,6 +334,7 @@ var framework = {
     },
 
     show : function (index) {
+        atList=false;
         var body = document.getElementsByTagName("body")[0];
         body.innerHTML = ""
         body.appendChild(this.tests[index].display());
@@ -358,12 +360,17 @@ trapfunction = function(event) {
 
     if (keynum == 8) { // backspace has code 8
         // thing to do instead of changing page
-        framework.buildList(); 
+        if (!atList) {
+            framework.buildList(); 
+        } else {
+            history.go(-1);
+        }
         return false;
-        // nullifies the backspace
     }
     return true;
 }
+atList = true;
+
 document.onkeydown = trapfunction; // IE, Firefox, Safari
 document.onkeypress = trapfunction; // only Opera needs the backspace nullifying in onkeypress
 

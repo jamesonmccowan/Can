@@ -19,7 +19,8 @@ var can = (function () {
         }
         
         var metaproto = {};
-        for (var i=0; i<bases.length; ++i) {
+        var i = bases.length;
+        while (i--) {
             var p = bases[i].prototype;
             for (var x in p) {
                 metaproto[x] = p[x];
@@ -168,7 +169,7 @@ var can = (function () {
             
             this.align = config.align;
             this.angle = parseFloat(config.angle)||0;
-            this.alpha = parseFloat(config.alpha)||1;
+            this.alpha = parseFloat(config.alpha)||null;
             if (config.composite)
                 this.composite = config.composite;
             
@@ -216,7 +217,7 @@ var can = (function () {
             // alignment by position
             if (this.align == "center")
                 ctx.translate(-this.width()/2, -this.height()/2);
-            if (this.align == "right")
+            else if (this.align == "right")
                 ctx.translate(-this.width(), -this.height());
             
             // transparency / alpha
@@ -512,58 +513,6 @@ var can = (function () {
         }
     });
     
-    //Reduce redundancy in text line iteration.
-    function each_line (self, callback, ctx) {
-        ctx = ctx||self.stage.context;
-        ctx.font = self.size + "px " +
-            (self.italic?"italic ":"") +
-            (self.bold?"bold ":"") + self.font;
-        
-        if (!self.maxWidth || !self.wrap) {
-            var lines = self.str.split(/\r\n|\n|\r/gm);
-            for(var i=0; i<lines.length; ++i){
-                var res = callback(lines[i], i, ctx,
-                    ctx.measureText(lines[i]).width);
-                if (res !== undefined) {
-                    return res;
-                }
-            }
-            return;
-        }
-        
-        var words = self.str.split(/([^\S\r\n]|[-,])/gm);
-        var line = "", lines = 0, w;
-        
-        for (var i=0;i<words.length;i++) {
-            //Check for newlines in the "word"
-            var testLines = words[i].split(/\r\n|\n|\r/gm);
-            if (testLines.length > 1) {
-                var tlines = testLines.slice(0, -1);
-                for (var x=0;x<tlines.length;++x) {
-                    var res = callback(tlines[x], lines++, ctx,
-                        ctx.measureText(tlines[x]).width);
-                    if (res !== undefined) {
-                        return res;
-                    }
-                }
-            }
-            
-            var word = testLines.slice(-1)[0];
-            var testLine = line+word+' ';
-            var testWidth = ctx.measureText(testLine).width;
-            if (testWidth > self.maxWidth && i > 0) {
-                var res = callback(line, lines++, ctx, w);
-                if (res !== undefined) {
-                    return res;
-                }
-                line = word + ' ';
-            } else {
-                line = testLine;
-            }
-            w = testWidth;
-        }
-    }
-    
     //All the Text objects
     var Text = proto([Can], {
         constructor : function Text(config){
@@ -574,20 +523,16 @@ var can = (function () {
             this.maxWidth = parseFloat(config.maxWidth)||0;
             this.size = parseFloat(config.size)||13;
             
-            this.fill = config.fill||"transparent";
+            this.fill = config.fill||"#000";
             this.stroke = config.stroke||"transparent";
-            this.base = config.base||"hanging";
+            this.base = config.base||"bottop";
             this.textAlign = config.textAlign||"left";
             this.font = config.font||"Verdana";
             this.wrap = (!!config.wrap)||false;
             this.bold = (!!config.bold)||false;
             this.italic = (!!config.italic)||false;
             this.underline = (!!config.underline)||false;
-            
-            if (this.stage)
-                this.text(config.str||"");
-            else
-                this.str = config.str||"";
+            this.text(config.str||"");
         },
         setStage : function (stage) {
             Can.prototype.setStage.call(this, stage);
@@ -601,114 +546,150 @@ var can = (function () {
             ctx.strokeStyle = this.stroke;
             ctx.textAlign = this.textAlign;
             ctx.textBaseline = this.base;
+
+            // some fonts don't display differenty for bold or italic
+            ctx.font = (this.italic?"italic ":"")
+                + (this.bold?"bold ":"")
+                + this.size + "px " + this.font;
             
             // passing a null maxWidth to fillText in chrome
             // prevents the text from displaying
-            var self = this, w = self.width();
-            
-            function underline(y){
-                if (self.underline) {
-                    var x = 0;
-                    if (self.textAlign == "center")
-                        x = -w/2;
-                    else if (self.textAlign == "right")
-                        x = -w;
-                    
-                    if (self.base == "top" || self.base == "hanging")
-                        y += self.size;
-                    else if (self.base == "middle")
-                        y += self.size/2;
-                    
-                    ctx.save();
-                    
-                    ctx.beginPath();
-                    //The underline should have the same style as
-                    //the text's fill
-                    ctx.strokeStyle = self.fill;
-                    ctx.lineWidth = self.bold?2:1;
-                    //Lines are drawn mid-pixel, so offset by half
-                    ctx.moveTo(x-0.5, y-0.5);
-                    ctx.lineTo(x+w-0.5, y-0.5);
-                    ctx.stroke();
-                    
-                    ctx.restore();
+            var self = this, y = this.size, w = this.maxWidth;
+
+            if (!w) {
+                ctx.strokeText(this.str, 0, y);
+                ctx.fillText(this.str, 0, y);
+                if (this.underline) {
+                    underline(y, ctx.measureText(this.str).width);
+                }
+            } else if (w > 0 && this.wrap) {
+                var words = this.str.split(' '), line = '';
+
+                for (var i=0;i<words.length;i++) {
+                    var testLine = line+words[i]+' ';
+                    var testWidth = ctx.measureText(testLine).width;
+                    if (testWidth > w && i > 0) {
+                        ctx.strokeText(line, 0, y, w);
+                        ctx.fillText(line, 0, y, w);
+                        if (this.underline) {
+                            underline(y, Math.min(w, ctx.measureText(line).width));
+                        }
+                        line = words[i] + ' ';
+                        y += this.size;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                ctx.strokeText(line, 0, y, w);
+                ctx.fillText(line, 0, y, w);
+                if (this.underline) {
+                    underline(y, Math.min(w, ctx.measureText(line).width));
+                }
+            } else {
+                ctx.strokeText(this.str, 0, y, w);
+                ctx.fillText(this.str, 0, y, w);
+                if (this.underline) {
+                    underline(y, Math.min(w, ctx.measureText(this.str).width));
                 }
             }
-            
-            var y = 0;
-            each_line(this, this.maxWidth?function (line) {
-                if (self.stroke)
-                    ctx.strokeText(line, 0, y, self.maxWidth);
-                if (self.fill)
-                    ctx.fillText(line, 0, y, self.maxWidth);
-                underline(y);
-                y += self.size;
-            }:function (line) {
-                if (self.stroke)
-                    ctx.strokeText(line, 0, y);
-                if (self.fill)
-                    ctx.fillText(line, 0, y);
-                underline(y);
-                y += self.size;
-            },ctx);
+            function underline(y, w) {
+                var x = 0;
+                if (self.textAlign == "center")
+                    x = -w/2;
+                else if (self.textAlign == "right")
+                    x = -w;
+                
+                if (self.base == "top" || self.base == "hanging")
+                    y += self.size;
+                else if (self.base == "middle")
+                    y += self.size/2;
+                
+                ctx.save();
+                
+                ctx.beginPath();
+                //The underline should have the same style as
+                //the text's fill
+                ctx.strokeStyle = self.fill;
+                ctx.lineWidth = self.bold?2:1;
+                //Lines are drawn mid-pixel, so offset by half
+                ctx.moveTo(x, y);
+                ctx.lineTo(x+w, y);
+                ctx.stroke();
+                
+                ctx.restore();
+            }
         },
         width : function () {
-            if (!this.stage) return this.maxWidth;
-            
-            var self = this, w = 0;
-            each_line(this, function (line, c, ctx, lw) {
-                w = Math.max(w, lw);
-            });
+            if (!this.stage || (this.maxWidth != 0 && !this.wrap)) {
+                this.w = this.maxWidth;
+                return this.maxWidth;
+            }
+
+            var ctx = this.stage.canvas.getContext("2d");
+            ctx.font = (this.italic?"italic ":"")
+                + (this.bold?"bold ":"")
+                + this.size + "px " + this.font;
+            var w = 0;
+
+            if (this.maxWidth == 0)
+                w = ctx.measureText(this.str).width;
+            else if (this.wrap) {
+                var words = this.str.split(' ');
+                var line = '';
+                var mw = this.maxWidth;
+
+                for (var i=0;i<words.length;i++) {
+                    var testLine = line+words[i]+' ';
+                    var testWidth = ctx.measureText(testLine).width;
+                    if (testWidth > mw && i > 0) {
+                        var lw = ctx.measureText(line).width;
+                        if (lw>mw) w = (mw>w?mw:w);
+                        else w = (lw>w?lw:w);
+                        line = words[i] + ' ';
+                    } else {
+                        line = testLine;
+                    }
+                }
+                var lw = ctx.measureText(line).width;
+                if (lw>mw) w = (mw>w?mw:w);
+                else w = (lw>w?lw:w);
+            }
+            this.w = w;
             return w;
         },
         height : function () {
-            if (!this.stage) return 0;
-            
-            var self = this, y = 0;
-            each_line(this, function () {
-                y += self.size;
-            });
-            return y;
-        },
-        line : function (x) {
-            if (!this.stage || !this.maxWidth || !this.wrap) {
-                if (x==0)
-                    return this.str;
-                return;
+            if (!this.stage || !this.wrap || this.maxWidth == 0) {
+                this.h = this.size;
+                return this.h;
             }
+
+            var ctx = this.stage.canvas.getContext("2d");
+            ctx.font = (this.italic?"italic ":"")
+                + (this.bold?"bold ":"")
+                + this.size + "px " + this.font;
+            var h = this.size;
+            var words = this.str.split(' ');
+            var line = '', y = h;
+
+            for (var i=0;i<words.length;i++) {
+                var testLine = line+words[i]+' ';
+                var testWidth = ctx.measureText(testLine).width;
+                if (testWidth > this.maxWidth && i > 0) {
+                    line = words[i] + ' ';
+                    y += h;
+                } else {
+                    line = testLine;
+                }
+            }
+            this.h = y;
             
-            return each_line(this, function (line, count) {
-                if (count == x)
-                    return line;
-            });
-        },
-        lines : function () {
-            if (!this.stage)
-                return [this.str];
-            var lines = [];
-            each_line(this, function (line) {
-                lines.push(line);
-            });
-            return lines;
+            return this.h;
         },
         text : function (str) {
             if (arguments.length) {
                 this.str = str;
-                
-                // height may need to be recalculated
-                if (!this.stage || this.maxWidth && this.wrap) {
-                    this.w = this.maxWidth;
-                } else {
-                    if (this.stage) {
-                        var ctx = this.stage.canvas.getContext("2d");
-                        var width = ctx.measureText(str).width;
-                        if (!this.w || !this.maxWidth ||
-                        this.maxWidth > width)
-                            this.w = width;
-                    }
-                }
                 this.h = this.height();
-                
+                this.w = this.width();
                 return this;
             } else {
                 return this.str;
@@ -967,7 +948,8 @@ var can = (function () {
             this.lineWidth = config.lineWidth||1;
         },
         draw : function (ctx) {
-            ctx.scale(1, this.h/this.w);
+            if (this.h != this.w)
+                ctx.scale(1, this.h/this.w);
             
             ctx.beginPath();
             
@@ -980,7 +962,8 @@ var can = (function () {
             ctx.fill();
             ctx.stroke();
             
-            ctx.scale(1, this.w/this.h);
+            if (this.h != this.w)
+                ctx.scale(1, this.w/this.h);
         }
     });
     
@@ -1055,7 +1038,7 @@ var can = (function () {
             this.h = height;
             this.fill = config.fill||"transparent";
             this.stroke = config.stroke||"transparent";
-            this.lineWidth = parseFloat(config.lineWidth)||1;
+            this.lineWidth = parseFloat(config.lineWidth)||2;
         },
         draw : function (ctx) {
             ctx.beginPath();
@@ -1113,7 +1096,7 @@ var can = (function () {
             this.w = width;
             this.h = height;
             this.style = config.style||"#000";
-            this.lineWidth = parseFloat(config.lineWidth)||1;
+            this.lineWidth = parseFloat(config.lineWidth)||2;
         },
         draw : function (ctx) {
             ctx.beginPath();
@@ -1375,7 +1358,8 @@ var can = (function () {
             return neg+pos;
         },
         setStage : function (stage) {
-            for (var i=0; i<this.cans.length; ++i) {
+            var i = this.cans.length
+            while (i--) {
                 this.cans[i].setStage(stage);
             }
             return Can.prototype.setStage(stage);
@@ -1384,9 +1368,10 @@ var can = (function () {
             return ctx.getImageData(0, 0, this.w, this.h);
         },
         draw : function (ctx) {
-            for (var i=0;i<this.cans.length;i++) {
-                var c = this.cans[i];
-                if (c.visible()) {
+            var i = 0, l = this.cans.length;
+            while (l-i) {
+                var c = this.cans[i++];
+                if (c.vis) {
                     c.beginDraw(ctx);
                     c.draw(ctx);
                     c.endDraw(ctx);
@@ -1424,7 +1409,8 @@ var can = (function () {
             this.timer = new Date().getTime();
         },
         setStage : function (stage) {
-            for (var i=0; i<this.frames.length; ++i) {
+            var i = this.frames.length;
+            while (i--) {
                 this.frames[i].setStage(stage);
             }
             return Can.prototype.setStage.call(this, stage);
@@ -1486,7 +1472,8 @@ var can = (function () {
             return null;
         },
         setStage : function (stage) {
-            for (var i=0; i<this.items.length; ++i) {
+            var i = this.items.length;
+            while (i--) {
                 this.items[i].setStage(stage);
             }
             return Can.prototype.setStage.call(this, stage);
@@ -1565,7 +1552,8 @@ var can = (function () {
             Group.call(this, config);
             
             this.stage = this;
-            for (var i=0; i<this.cans.length; ++i) {
+            var i = this.cans.length;
+            while (i--) {
                 this.cans[i].stage = this;
             }
             
