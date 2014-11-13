@@ -47,3 +47,27 @@ canvas {
 #canvas .box {
     background: #fff;
     cursor: default;}
+
+#colors, #brush {
+    border-collapse: collapse;}
+#colors td, #brush td {
+    border: 0px solid transparent;}
+
+.circle {
+    height: 255px;
+    width: 255px;
+    padding: 0px;}
+
+#circle {
+    border: 1px solid black;
+    border-radius: 10px;
+    margin: auto;
+    width: 10px;
+    height: 10px;}
+
+#brush {right: 10px;}
+.brush_settings {
+    text-align: center;}
+
+#size {transform: rotate(-90deg);
+    margin: 0.75in -0.75in;}

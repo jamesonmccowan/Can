@@ -137,6 +137,7 @@ window.addEventListener("load", function() {
     body.style.width  = window.innerWidth  + "px";
     body.style.height = window.innerHeight + "px";
     var t = [];
+    t.push(document.getElementById("brush").getElementsByTagName("div")[0]);
     t.push(document.getElementById("colors").getElementsByTagName("div")[0]);
     t.push(document.getElementById("tools").getElementsByTagName("div")[0]);
     t.push(document.getElementById("canvas").getElementsByTagName("div")[0]);
@@ -187,11 +188,14 @@ window.addEventListener("load", function() {
         t[i].addEventListener("mousedown", dragStart, false);
         var p = t[i].parentNode;
         var rect = p.getBoundingClientRect();
-        p.style.width = (p.clientWidth + 1) + "px";
         p.style.position="absolute";
         p.style.top  = (rect.top  - 10) + "px";
         p.style.left = (rect.left - 10) + "px";
     }
+
+    document.getElementById("brush").style.top = document.getElementById("canvas").style.top;
+    document.getElementById("brush").style.left = (window.innerWidth - document.getElementById("brush").offsetWidth - 10) + "px";
+
 
     document.getElementById("canvas").addEventListener("mousedown", function (e) {
         body.resizing = true;

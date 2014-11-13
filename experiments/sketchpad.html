@@ -107,38 +107,52 @@
     <div class="frame" id="colors">
         <div class="header">Colors</div>
         <table class="box">
-            <table>
-                <tr>
-                    <td id="c1" style="width: 1.25in; height: 1.25in; background-color: #000;" colspan="4"><h1>1</h1></td>
-                    <td rowspan="2">
-                    	R<input type="range" id="ri" min="0" max="255" style="width: 1.5in;" value="0" />
-                        <span id="ro">000</span><br />
+            <tr>
+                <td id="c1" style="width: 1.25in; height: 1.25in; background-color: #000;" colspan="4"><h1>1</h1></td>
+                <td rowspan="2">
+                    <table><tr>
+                        <td>R</td>
+                        <td><input type="range" id="ri" min="0" max="255" style="width: 1.5in;" value="0" /></td>
+                        <td id="ro">000</td>
+                    </tr><tr>
+                        <td>G</td>
+                        <td><input type="range" id="gi" min="0" max="255" style="width: 1.5in;" value="0" /></td>
+                        <td id="go">000</td>
+                    </tr><tr>
+                        <td>B</td>
+                        <td><input type="range" id="bi" min="0" max="255" style="width: 1.5in;" value="0" /></td>
+                        <td id="bo">000</td>
+                    </tr></table>
+                	<hr />
 
-	                    G<input type="range" id="gi" min="0" max="255" style="width: 1.5in;" value="0" />
-                        <span id="go">000</span><br />
+                	<input id="text" value="#FFFFFF"/>
+                	<button type="button" id="sethex">Set</button>
 
-                    	B<input type="range" id="bi" min="0" max="255" style="width: 1.5in;" value="0" />
-                        <span id="bo">000</span><br />
+                	<hr />
 
-                    	<hr />
-
-                    	<input id="text" value="#FFFFFF"/>
-                    	<button type="button" id="sethex">Set</button>
-
-                    	<hr />
-
-                    	<input type="color" id="colorselect"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th id="c2" style="background-color: #fff;">2</th>
-                    <th id="c3" style="background-color: #f00;">3</th>
-                    <th id="c4" style="background-color: #0f0;">4</th>
-                    <th id="c5" style="background-color: #00f;">5</th>
-                </tr>
-            </table>
-        </div>
+                	<input type="color" id="colorselect"/>
+                </td>
+            </tr>
+            <tr>
+                <th id="c2" style="background-color: #fff;">2</th>
+                <th id="c3" style="background-color: #f00;">3</th>
+                <th id="c4" style="background-color: #0f0;">4</th>
+                <th id="c5" style="background-color: #00f;">5</th>
+            </tr>
+        </table>
     </div>
     
+    <div class="frame" id="brush">
+        <div class="header">Brush</div>
+        <table  class="box">
+            <tr>
+                <td class="circle"><div id="circle"></div></td>
+                <td class="brush_settings">
+                    Size:<br />
+                    <input type="range" id="size" min="0" max="255" style="width: 1.5in;" value="0" /><br />
+                    <span id="sizeValue">10px</span></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
