@@ -32,7 +32,6 @@ var sketchpad = {
     coloring : {
         init : function () {
             var self = this;
-            this.display = $("#c1");
             this.ri = $("#ri");
             this.ro = $("#ro");
             this.ro.innerHTML = ri.value;
@@ -48,13 +47,27 @@ var sketchpad = {
             this.text = $("#text");
             this.select = $("#colorselect");
 
+            for (var i=1;i<this.max+1;i++) {
+                var c = $("#c"+i);
+                c[0].val = i-1;
+                this.boxes.push(c);
+                c.on("click", function () {
+                    self.jump(this.val);
+                });
+            }
+
             function setColorRGB() {
                 self.ro.html(self.ri.val());
                 self.go.html(self.gi.val());
                 self.bo.html(self.bi.val());
-                var color = "rgb(" + self.ri.val() + ", " + self.gi.val() + ", " + self.bi.val() + ")"
-                self.display.css("background-color", color);
-                self.color(color);
+                var color = "rgb(" + self.ri.val() + ", " + self.gi.val() + ", " + self.bi.val() + ")";
+                if (self.change) {
+                    self.color(color);
+                    self.change = false;
+                } else {
+                    self.colors[0] = color;
+                    self.boxes[0].css("background-color", color);
+                }
             }
             this.setColorRGB = setColorRGB;
             ri.addEventListener("change", setColorRGB, false);
@@ -63,33 +76,42 @@ var sketchpad = {
             setColorRGB();
 
             function setColorHex() {
-                self.display.css("background-color", self.text.val());
                 self.color(self.text.val());
+                self.change = true;
             }
             this.setColorHex = setColorHex;
             $("#sethex").on("click", setColorHex);
 
             function setColorSelect() {
-                self.display.css("background-color", self.select.val());
                 self.color(self.select.val());
+                self.change = true;
             }
             this.setColorSelect = setColorSelect;
             this.select.on("change", setColorSelect);
             this.select.on("mouseup", setColorSelect);
         },
-        colors : ["#000"],
-        max : 7,
+        colors : ["#66f", "#f66", "#6f6"],
+        boxes : [],
+        max : 4,
+        change : true,
         color : function (c) {
             if (arguments.length) {
                 [].unshift.call(this.colors, c);
                 var off = this.colors.length - this.max;
                 if (off > 0)
                     this.colors.splice(this.max, off);
+                for (var i=0;i<this.max;i++) {
+                    this.boxes[i].css("background-color", this.colors[i]);
+                }
             } else {
                 return this.colors[0];
             }
         },
-        menu : function () {},
+        jump : function (num) {
+            var c = this.colors[num];
+            this.colors.splice(num, 1);
+            this.color(c);
+        },
     },
     paint : {
         chainStart : function (x, y) {
@@ -102,6 +124,7 @@ var sketchpad = {
             });
             sketchpad.stage.add(this.chain);
             sketchpad.stage.draw();
+            sketchpad.coloring.change = true;
         },
         chainMove : function (x, y) {
             this.chain.points.push({x:x,y:y});
@@ -134,10 +157,16 @@ var sketchpad = {
 
 window.addEventListener("load", function() {
     $("#size").on("input",function(){
-		var val = this.value, $circle = $("#circle");
-		$("#sizeValue").html(val + "px");
-		$circle.css({borderRadius:val+"px",width:val+"px",height:val+"px"});
+        var val = this.value, $circle = $("#circle");
+        $("#sizeValue").html(val + "px");
+        $circle.css({borderRadius:val+"px",width:val+"px",height:val+"px"});
+        sketchpad.paint.width = val;
 	});
+    var val =  $("#size").val();
+    $("#sizeValue").html(val + "px");
+    $("#circle").css({borderRadius:val+"px",width:val+"px",height:val+"px"});
+    sketchpad.paint.width = val;
+
 
     var body = document.getElementsByTagName("body")[0];
     body.style.width  = window.innerWidth  + "px";
