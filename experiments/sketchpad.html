@@ -28,43 +28,20 @@
     <div id="bar">
         <table id="menu">
             <tr>
-                <td>File</td>
-                <td>Edit</td>
-                <td>View</td>
-                <td>Help</td>
-            </tr>
-            <tr>
-                <td>
-                    <ul>
-                        <li>New</li>
-                        <li>Load</li>
-                        <li>Save</li>
-                        <li>Close</li>
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        <li>Undo</li>
-                        <li>Redo</li>
-                        <li>Cut</li>
-                        <li>Copy</li>
-                        <li>Paste</li>
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        <li>Toolbars</li>
-                        <li>Zoom In</li>
-                        <li>Zoom Out</li>
-                        <li>Reset</li>
-                        <li>Fit Screen</li>
-                    </ul>
-                </td>
-                <td>
-                    <ul>
-                        <li>About</li>
-                    </ul>
-                </td>
+                <td>File</td><td>Edit</td><td>View</td><td>Help</td>
+            </tr><tr>
+                <td><ul>
+                    <li>New</li><li>Load</li><li>Save</li><li>Close</li>
+                </ul></td>
+                <td><ul>
+                    <li>Undo</li><li>Redo</li><li>Cut</li>
+                    <li>Copy</li><li>Paste</li>
+                </ul></td>
+                <td><ul>
+                    <li>Toolbars</li><li>Zoom In</li>
+                    <li>Zoom Out</li><li>Reset</li><li>Fit Screen</li>
+                </ul></td>
+                <td><ul><li>About</li></ul></td>
             </tr>
         </table>
 
@@ -76,51 +53,42 @@
     <div class="frame" id="canvas">
         <div class="header">Canvas</div>
         <div class="box">
-            <canvas id="stage"></canvas>
+            <canvas id="stage" width=500 height=500></canvas>
         </div>
     </div>
 
-    <div class="frame" id="tools">
+    <!--<div class="frame" id="tools">
         <div class="header">Tools</div>
         <table class="box">
             <tr>
-                <th>Brush</th>
-                <th>Pencil</th>
-                <th>Eraser</th>
-                <th>Stamp</th>
+                <th>Brush</th><th>Pencil</th><th>Eraser</th><th>Stamp</th>
             </tr>
             <tr>
-                <th>Magnify</th>
-                <th>Fill</th>
-                <th>Polygon</th>
-                <th>Select</th>
+                <th>Magnify</th><th>Fill</th><th>Polygon</th><th>Select</th>
             </tr>
             <tr>
-                <th>Text</th>
-                <th>Group</th>
-                <th>Shapes</th>
-                <th>Transform</th>
+                <th>Text</th><th>Group</th><th>Shapes</th><th>Transform</th>
             </tr>
         </table>
-    </div>
+    </div>-->
 
     <div class="frame" id="colors">
         <div class="header">Colors</div>
         <table class="box">
             <tr>
-                <td id="c1" style="width: 1.25in; height: 1.25in; background-color: #000;" colspan="4"><h1>1</h1></td>
+                <td id="c1" colspan="4"><h1>1</h1></td>
                 <td rowspan="2">
                     <table><tr>
                         <td>R</td>
-                        <td><input type="range" id="ri" min="0" max="255" style="width: 1.5in;" value="0" /></td>
+                        <td><input type="range" id="ri" min="0" max="255" value="0" /></td>
                         <td id="ro">000</td>
                     </tr><tr>
                         <td>G</td>
-                        <td><input type="range" id="gi" min="0" max="255" style="width: 1.5in;" value="0" /></td>
+                        <td><input type="range" id="gi" min="0" max="255" value="0" /></td>
                         <td id="go">000</td>
                     </tr><tr>
                         <td>B</td>
-                        <td><input type="range" id="bi" min="0" max="255" style="width: 1.5in;" value="0" /></td>
+                        <td><input type="range" id="bi" min="0" max="255" value="0" /></td>
                         <td id="bo">000</td>
                     </tr></table>
                 	<hr />
@@ -134,10 +102,9 @@
                 </td>
             </tr>
             <tr>
-                <th id="c2" style="background-color: #fff;">2</th>
-                <th id="c3" style="background-color: #f00;">3</th>
-                <th id="c4" style="background-color: #0f0;">4</th>
-                <th id="c5" style="background-color: #00f;">5</th>
+                <th id="c2" style="background-color: #66f;">2</th>
+                <th id="c3" style="background-color: #f66;">3</th>
+                <th id="c4" style="background-color: #6f6;">4</th>
             </tr>
         </table>
     </div>
@@ -149,8 +116,10 @@
                 <td class="circle"><div id="circle"></div></td>
                 <td class="brush_settings">
                     Size:<br />
-                    <input type="range" id="size" min="0" max="255" style="width: 1.5in;" value="0" /><br />
-                    <span id="sizeValue">10px</span></td>
+                    <input type="range" id="size" min="0" max="255" value="0" />
+                    <br />
+                    <span id="sizeValue">255px</span>
+                </td>
             </tr>
         </table>
     </div>

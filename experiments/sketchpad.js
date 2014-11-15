@@ -133,13 +133,19 @@ var sketchpad = {
 };
 
 window.addEventListener("load", function() {
+    $("#size").on("input",function(){
+		var val = this.value, $circle = $("#circle");
+		$("#sizeValue").html(val + "px");
+		$circle.css({borderRadius:val+"px",width:val+"px",height:val+"px"});
+	});
+
     var body = document.getElementsByTagName("body")[0];
     body.style.width  = window.innerWidth  + "px";
     body.style.height = window.innerHeight + "px";
     var t = [];
     t.push(document.getElementById("brush").getElementsByTagName("div")[0]);
     t.push(document.getElementById("colors").getElementsByTagName("div")[0]);
-    t.push(document.getElementById("tools").getElementsByTagName("div")[0]);
+    //t.push(document.getElementById("tools").getElementsByTagName("div")[0]);
     t.push(document.getElementById("canvas").getElementsByTagName("div")[0]);
 
     function dragStart(event) {
@@ -192,10 +198,6 @@ window.addEventListener("load", function() {
         p.style.top  = (rect.top  - 10) + "px";
         p.style.left = (rect.left - 10) + "px";
     }
-
-    document.getElementById("brush").style.top = document.getElementById("canvas").style.top;
-    document.getElementById("brush").style.left = (window.innerWidth - document.getElementById("brush").offsetWidth - 10) + "px";
-
 
     document.getElementById("canvas").addEventListener("mousedown", function (e) {
         body.resizing = true;

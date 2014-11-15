@@ -9,6 +9,7 @@ h1 {text-align: center;
     padding: 0px;}
 
 #bar {
+    height: 31px;
     background: #fff;}
 
 canvas {
@@ -25,7 +26,9 @@ canvas {
     margin: 10px;
     display: table;
     position: relative;
-    border: 2px outset #aaa;}
+    border-collapse: collapse;
+    border-top: 2px outset #aaa;
+    border-left: 2px outset #aaa;}
 
 .header {
     background: #aea;
@@ -40,7 +43,6 @@ canvas {
 
 .box td, .box th {
     padding: 0px 3px;
-    border: 1px outset #8ae;
     background: #ccc;}
 
 #canvas {cursor: se-resize;}
@@ -48,14 +50,24 @@ canvas {
     background: #fff;
     cursor: default;}
 
+#colors {
+    position: absolute;
+    top: 30px;
+    right: 10px;}
+
+#brush {
+    position: absolute;
+    top: 250px;
+    right: 10px;}
+
 #colors, #brush {
     border-collapse: collapse;}
 #colors td, #brush td {
     border: 0px solid transparent;}
 
 .circle {
-    height: 255px;
-    width: 255px;
+    height: 260px;
+    width: 260px;
     padding: 0px;}
 
 #circle {
@@ -65,9 +77,22 @@ canvas {
     width: 10px;
     height: 10px;}
 
-#brush {right: 10px;}
+#c1 {
+    width: 1.25in;
+    height: 1.25in;
+    background-color: #000;}
+
+#c1, #c2, #c3, #c4 {
+    text-shadow: 0px 0px 2px #fff;}
+
+#ri, #gi, #bi {width: 1.5in;}
+#ro, #go, #bo {width: 30px;}
+
+
 .brush_settings {
+    width: 50px;
     text-align: center;}
 
 #size {transform: rotate(-90deg);
-    margin: 0.75in -0.75in;}
+    width: 190px;
+    margin: 90px -90px;}
