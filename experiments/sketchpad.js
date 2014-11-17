@@ -17,6 +17,17 @@ $(document).ready(function() {
     $('#canvas').disableSelection();
 });
 
+function saveSketchpad() {
+    var canvas = document.getElementById("stage");
+    var downloadLink = document.createElement("a");
+    downloadLink.download = "sketchpad.png";
+    downloadLink.innerHTML = "<br />Download";
+    downloadLink.href = canvas.toDataURL("image/png").replace('image/png', 'image/octet-stream');
+    downloadLink.addEventListener("click", function() {document.body.removeChild(this);},false);
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+}
+
 var sketchpad = {
     init : function (stage) {
         this.stage = stage;
@@ -88,7 +99,6 @@ var sketchpad = {
             }
             this.setColorSelect = setColorSelect;
             this.select.on("change", setColorSelect);
-            this.select.on("mouseup", setColorSelect);
         },
         colors : ["#66f", "#f66", "#6f6"],
         boxes : [],
@@ -156,17 +166,14 @@ var sketchpad = {
 };
 
 window.addEventListener("load", function() {
-    $("#size").on("input",function(){
-        var val = this.value, $circle = $("#circle");
+    function brushSize() {
+        var val =  $("#size").val();
         $("#sizeValue").html(val + "px");
-        $circle.css({borderRadius:val+"px",width:val+"px",height:val+"px"});
+        $("#circle").css({borderRadius:val+"px",width:val+"px",height:val+"px"});
         sketchpad.paint.width = val;
-	});
-    var val =  $("#size").val();
-    $("#sizeValue").html(val + "px");
-    $("#circle").css({borderRadius:val+"px",width:val+"px",height:val+"px"});
-    sketchpad.paint.width = val;
-
+    }
+    $("#size").on("input", brushSize);
+    brushSize();
 
     var body = document.getElementsByTagName("body")[0];
     body.style.width  = window.innerWidth  + "px";
@@ -174,7 +181,6 @@ window.addEventListener("load", function() {
     var t = [];
     t.push(document.getElementById("brush").getElementsByTagName("div")[0]);
     t.push(document.getElementById("colors").getElementsByTagName("div")[0]);
-    //t.push(document.getElementById("tools").getElementsByTagName("div")[0]);
     t.push(document.getElementById("canvas").getElementsByTagName("div")[0]);
 
     function dragStart(event) {

@@ -5,11 +5,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" rel="stylesheet" href="sketchpad.css" />
-    <style type="text/css">
-    </style>
     <script type="text/javascript" src="../scripts/can.js"></script>
     <script type="text/javascript" src="jquery.js"></script>
-    <script type="text/javascript" src="sketchpad.js">
+    <script type="text/javascript" src="sketchpad.js"></script>
+    <script type="text/javascript">
     </script>
 </head>
 <body>
@@ -28,7 +27,7 @@
     <div id="bar">
         <table id="menu">
             <tr>
-                <td>File</td><td>Edit</td><td>View</td><td>Help</td>
+                <td>File</td><td>Edit</td><td>View</td><td>Help</td><td onclick="saveSketchpad()">Save</td>
             </tr><tr>
                 <td><ul>
                     <li>New</li><li>Load</li><li>Save</li><li>Close</li>
@@ -102,9 +101,9 @@
                 </td>
             </tr>
             <tr>
-                <th id="c2" style="background-color: #66f;">2</th>
-                <th id="c3" style="background-color: #f66;">3</th>
-                <th id="c4" style="background-color: #6f6;">4</th>
+                <th id="c2">2</th>
+                <th id="c3">3</th>
+                <th id="c4">4</th>
             </tr>
         </table>
     </div>

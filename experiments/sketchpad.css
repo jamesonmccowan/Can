@@ -4,23 +4,24 @@ body {
     padding: 0px;
     background: #666;}
 
-h1 {text-align: center;
+h1 {
+    text-align: center;
     margin: 0px;
     padding: 0px;}
 
+/**********************************/
+/** Menu Bar                     **/
+/**********************************/
 #bar {
     height: 31px;
     background: #fff;}
 
-canvas {
-    background: url(sketchpad.bg.png);
-    margin: 0px;
-    padding: 0px;}
-
 #bar ul {
     display: none;}
 
-
+/**********************************/
+/** Movable Boxes                **/
+/**********************************/
 .frame {
     background: #aaa;
     margin: 10px;
@@ -45,19 +46,29 @@ canvas {
     padding: 0px 3px;
     background: #ccc;}
 
-#canvas {cursor: se-resize;}
+/**********************************/
+/* Canvas Menu                   **/
+/**********************************/
+canvas {
+    background: url(sketchpad.bg.png);
+    margin: 0px;
+    padding: 0px;}
+
+#canvas {cursor: se-resize;
+    position: absolute;
+    top: 30px;
+    left: 10px;}
+
 #canvas .box {
     background: #fff;
     cursor: default;}
 
+/**********************************/
+/* Color Menu                    **/
+/**********************************/
 #colors {
     position: absolute;
     top: 30px;
-    right: 10px;}
-
-#brush {
-    position: absolute;
-    top: 250px;
     right: 10px;}
 
 #colors, #brush {
@@ -88,6 +99,13 @@ canvas {
 #ri, #gi, #bi {width: 1.5in;}
 #ro, #go, #bo {width: 30px;}
 
+/**********************************/
+/* Brush Menu                    **/
+/**********************************/
+#brush {
+    position: absolute;
+    top: 250px;
+    right: 10px;}
 
 .brush_settings {
     width: 50px;
