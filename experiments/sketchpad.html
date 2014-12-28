@@ -5,6 +5,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link type="text/css" rel="stylesheet" href="sketchpad.css" />
+    <style type="text/css">
+    </style>
     <script type="text/javascript" src="../scripts/can.js"></script>
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="sketchpad.js"></script>
@@ -27,7 +29,8 @@
     <div id="bar">
         <table id="menu">
             <tr>
-                <td>File</td><td>Edit</td><td>View</td><td>Help</td><td onclick="saveSketchpad()">Save</td>
+                <td>File</td><td>Edit</td><td>View</td><td>Help</td><td onclick="saveSketchpad()">Save</td><td>File upload:<input type="file" accept="image/*" id="uploader"/>
+</td>
             </tr><tr>
                 <td><ul>
                     <li>New</li><li>Load</li><li>Save</li><li>Close</li>
@@ -115,9 +118,9 @@
                 <td class="circle"><div id="circle"></div></td>
                 <td class="brush_settings">
                     Size:<br />
-                    <input type="range" id="size" min="0" max="255" value="0" />
+                    <input type="range" id="size" min="0" max="255" value="10" />
                     <br />
-                    <span id="sizeValue">255px</span>
+                    <span id="sizeValue"></span>
                 </td>
             </tr>
         </table>
